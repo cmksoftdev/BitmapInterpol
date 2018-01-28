@@ -3,6 +3,8 @@
 
 InterpolationEngine::InterpolationEngine(stBitmap bitmap)
 {
+	if (&bitmap == NULL)
+		throw ERROR_DATA;
 	bitmapInput = bitmap;
 	bitmapOutput.byData = NULL;
 	bitmapOutput.byHeader = NULL;
