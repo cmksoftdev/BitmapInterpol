@@ -21,12 +21,12 @@ InterpolationEngine::~InterpolationEngine()
 		free(bitmapOutput.byHeaderExp);
 }
 
-void InterpolationEngine::DoubleSolution(char * outputFileName)
+void InterpolationEngine::ChangeSolution(char * outputFileName, int multiplicator)
 {
-	createEmptyBitmap(5);
-	fillExistingPixels(5);
-	fillHorizontalGaps(5);
-	fillVerticalGaps(5);
+	createEmptyBitmap(multiplicator);
+	fillExistingPixels(multiplicator);
+	fillHorizontalGaps(multiplicator);
+	fillVerticalGaps(multiplicator);
 	ins_crebm(&bitmapOutput, outputFileName);
 }
 
@@ -110,7 +110,7 @@ void InterpolationEngine::fillExistingPixels(int multiplicator)
 
 void InterpolationEngine::fillHorizontalGaps(int multiplicator)
 {
-	unsigned int iCurrentOutputIndex = 0;
+	unsigned int iCurrentOutputIndex = 3;
 	unsigned int iLineLength = bitmapOutput.iWidth * 3 + bitmapOutput.sFillByteCount;
 	unsigned int iStepX = multiplicator * 3;
 	unsigned int iStepX2 = (multiplicator - 1) * 3;
@@ -121,7 +121,7 @@ void InterpolationEngine::fillHorizontalGaps(int multiplicator)
 		{
 			for (size_t k = 0; k < 3; k++)
 			{
-				int a = (bitmapOutput.byData[iCurrentOutputIndex + k + iStepX] - bitmapOutput.byData[iCurrentOutputIndex + k - 3])/multiplicator;
+				int a = (bitmapOutput.byData[iCurrentOutputIndex + k + iStepX-3] - bitmapOutput.byData[iCurrentOutputIndex + k - 3])/multiplicator;
 				int b = bitmapOutput.byData[iCurrentOutputIndex + k - 3];
 				for (size_t x = 0; x < multiplicator; x++)
 				{
@@ -188,13 +188,13 @@ void InterpolationEngine::fillVerticalGaps(int multiplicator)
 	unsigned int iCurrentLowerLineIndex = multiplicator * iLineLength;
 	unsigned int iStepX = multiplicator * 3;
 	unsigned int iShiftY = (multiplicator-1) * iLineLength;
-	for (size_t i = 0; i < bitmapInput.iHeight - (multiplicator-1); i++)
+	for (size_t i = 0; i < bitmapInput.iHeight - 1; i++)
 	{
 		for (size_t j = 0; j < bitmapOutput.iWidth; j++)
 		{
 			for (size_t k = 0; k < 3; k++)
 			{
-				int a = (bitmapOutput.byData[iCurrentLowerLineIndex + k + iStepX] - bitmapOutput.byData[iCurrentUpperLineIndex + k]) / multiplicator;
+				int a = (bitmapOutput.byData[iCurrentLowerLineIndex + k] - bitmapOutput.byData[iCurrentUpperLineIndex + k]) / multiplicator;
 				int b = bitmapOutput.byData[iCurrentUpperLineIndex + k];
 				for (size_t x = 0; x < multiplicator; x++)
 				{

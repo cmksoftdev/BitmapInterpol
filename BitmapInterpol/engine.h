@@ -21,7 +21,7 @@ class InterpolationEngine
 public:
 	InterpolationEngine(stBitmap bitmap);
 	~InterpolationEngine();
-	void DoubleSolution(char* outputFileName);
+	void ChangeSolution(char* outputFileName, int multiplicator);
 
 private:
 	stBitmap bitmapOutput;
