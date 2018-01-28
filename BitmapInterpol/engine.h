@@ -28,8 +28,12 @@ private:
 	stBitmap bitmapInput;
 
 	void createEmptyBitmap();
+	void createEmptyBitmap(int multiplicator);
 	void fillExistingPixels();
 	void fillHorizontalGaps();
+	void fillExistingPixels(int multiplicator);
+	void fillHorizontalGaps(int multiplicator);
 	void fillVerticalGaps();
+	void fillVerticalGaps(int multiplicator);
 	BYTE calcByte(BYTE a, BYTE b);
 };
