@@ -30,12 +30,6 @@ void InterpolationEngine::ChangeSolution(char * outputFileName, int multiplicato
 	ins_crebm(&bitmapOutput, outputFileName);
 }
 
-//In the first test we will double the solution.
-void InterpolationEngine::createEmptyBitmap()
-{
-	createEmptyBitmap(2);
-}
-
 void InterpolationEngine::createEmptyBitmap(int multiplicator)
 {
 	int pow = multiplicator*multiplicator;
@@ -53,38 +47,6 @@ void InterpolationEngine::createEmptyBitmap(int multiplicator)
 	ins_overwritehead(&bitmapOutput);
 }
 
-void InterpolationEngine::fillExistingPixels()
-{
-	fillExistingPixels(2);
-}
-
-void InterpolationEngine::fillHorizontalGaps()
-{
-	unsigned int iCurrentOutputIndex = 3;
-	for (size_t i = 0; i < bitmapOutput.iHeight; i++)
-	{		
-		for (size_t j = 0; j < bitmapInput.iWidth - 1; j++)
-		{
-			for (size_t k = 0; k < 3; k++)
-			{
-				bitmapOutput.byData[iCurrentOutputIndex + k] = calcByte(bitmapOutput.byData[iCurrentOutputIndex + k - 3],
-					bitmapOutput.byData[iCurrentOutputIndex + k + 3]);
-			}
-			iCurrentOutputIndex += 6;
-		}
-		for (size_t j = 0; j < 3; j++)
-		{
-			bitmapOutput.byData[iCurrentOutputIndex + j] = bitmapOutput.byData[iCurrentOutputIndex + j - 3];
-		}
-		iCurrentOutputIndex += 6;
-		for (size_t j = 0; j < bitmapInput.sFillByteCount; j++)
-		{
-			bitmapOutput.byData[iCurrentOutputIndex + j] = 0;
-		}
-		iCurrentOutputIndex += bitmapInput.sFillByteCount;
-	}
-}
-
 void InterpolationEngine::fillExistingPixels(int multiplicator)
 {
 	unsigned int iCurrentOutputIndex = 0;
@@ -96,10 +58,13 @@ void InterpolationEngine::fillExistingPixels(int multiplicator)
 	{
 		for (size_t j = 0; j < bitmapInput.iWidth; j++)
 		{
-			for (size_t k = 0; k < 3; k++)
-			{
-				bitmapOutput.byData[iCurrentOutputIndex + k] = bitmapInput.byData[iCurrentInputIndex + k];
-			}
+			if (r)
+				bitmapOutput.byData[iCurrentOutputIndex] = bitmapInput.byData[iCurrentInputIndex];
+			if (g)
+				bitmapOutput.byData[iCurrentOutputIndex + 1] = bitmapInput.byData[iCurrentInputIndex + 1];
+			if (b)
+				bitmapOutput.byData[iCurrentOutputIndex + 2] = bitmapInput.byData[iCurrentInputIndex + 2];
+			
 			iCurrentOutputIndex += iStepX;
 			iCurrentInputIndex += 3;
 		}
@@ -140,43 +105,6 @@ void InterpolationEngine::fillHorizontalGaps(int multiplicator)
 			bitmapOutput.byData[iCurrentOutputIndex + j] = 0;
 		}
 		iCurrentOutputIndex += iStepY;
-	}
-}
-
-void InterpolationEngine::fillVerticalGaps()
-{
-	unsigned int iLineLength = bitmapOutput.iWidth * 3 + bitmapOutput.sFillByteCount;
-	unsigned int iCurrentOutputIndex = iLineLength;
-	unsigned int iCurrentUpperLineIndex = 0;
-	unsigned int iCurrentLowerLineIndex = 2 * iLineLength;
-	for (size_t i = 0; i < bitmapInput.iHeight - 1; i++)
-	{
-		for (size_t j = 0; j < bitmapOutput.iWidth; j++)
-		{
-			for (size_t k = 0; k < 3; k++)
-			{
-				bitmapOutput.byData[iCurrentOutputIndex + k] = calcByte(bitmapOutput.byData[iCurrentUpperLineIndex + k],
-					bitmapOutput.byData[iCurrentLowerLineIndex + k]);
-			}
-			iCurrentOutputIndex += 3;
-			iCurrentUpperLineIndex += 3;
-			iCurrentLowerLineIndex += 3;
-		}
-		for (size_t k = 0; k < bitmapInput.sFillByteCount; k++)
-		{
-			bitmapOutput.byData[iCurrentOutputIndex + k] = 0;
-		}
-		iCurrentOutputIndex += iLineLength;
-		iCurrentUpperLineIndex += iLineLength;
-		iCurrentLowerLineIndex += iLineLength;
-	}
-	for (size_t i = 0; i < bitmapOutput.iWidth * 3; i++)
-	{
-		bitmapOutput.byData[iCurrentOutputIndex + i] = bitmapOutput.byData[iCurrentUpperLineIndex + i];
-	}
-	for (size_t i = 0; i < bitmapInput.sFillByteCount; i++)
-	{
-		bitmapOutput.byData[iCurrentOutputIndex + i] = 0;
 	}
 }
 
@@ -221,9 +149,4 @@ void InterpolationEngine::fillVerticalGaps(int multiplicator)
 	{
 		bitmapOutput.byData[iCurrentOutputIndex + i] = 0;
 	}
-}
-
-BYTE InterpolationEngine::calcByte(BYTE a, BYTE b)
-{
-	return (a + b) / 2;
 }
