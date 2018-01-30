@@ -19,7 +19,7 @@ struct RGBA
 class InterpolationEngine
 {
 public:
-	bool r = true, g = false, b = true;
+	bool r = true, g = true, b = true;
 	InterpolationEngine(stBitmap bitmap);
 	~InterpolationEngine();
 	void ChangeSolution(char* outputFileName, int multiplicator);

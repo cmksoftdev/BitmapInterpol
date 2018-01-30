@@ -7,7 +7,6 @@ stBitmap* ins_chopbm(char* dat)
 	stBitmap *zeiger;
 	BYTE byMagischeZeichen[2];
 	long lPixelstart, lDateilaenge;
-
 	if ((zeiger = (stBitmap*)malloc(sizeof(stBitmap))) == NULL)
 	{
 		return ERROR_MEMO;
@@ -45,22 +44,10 @@ stBitmap* ins_chopbm(char* dat)
 						fclose(datei);
 						return ERROR_DAT;
 					}
-					lDateilaenge = zeiger->byHeader[2];
-					lDateilaenge = lDateilaenge + zeiger->byHeader[3] * 256;
-					lDateilaenge = lDateilaenge + zeiger->byHeader[4] * 65536;
-					lDateilaenge = lDateilaenge + zeiger->byHeader[5] * 16777216;
-					lPixelstart = zeiger->byHeader[10];
-					lPixelstart = lPixelstart + zeiger->byHeader[11] * 256;
-					lPixelstart = lPixelstart + zeiger->byHeader[12] * 65536;
-					lPixelstart = lPixelstart + zeiger->byHeader[13] * 16777216;
-					zeiger->iWidth = zeiger->byHeader[18];
-					zeiger->iWidth = zeiger->iWidth + zeiger->byHeader[19] * 256;
-					zeiger->iWidth = zeiger->iWidth + zeiger->byHeader[20] * 65536;
-					zeiger->iWidth = zeiger->iWidth + zeiger->byHeader[21] * 16777216;
-					zeiger->iHeight = zeiger->byHeader[22];
-					zeiger->iHeight = zeiger->iHeight + zeiger->byHeader[23] * 256;
-					zeiger->iHeight = zeiger->iHeight + zeiger->byHeader[24] * 65536;
-					zeiger->iHeight = zeiger->iHeight + zeiger->byHeader[25] * 16777216;
+					lDateilaenge = *(long*)&zeiger->byHeader[2];
+					lPixelstart = *(long*)&zeiger->byHeader[10];
+					zeiger->iWidth = *(long*)&zeiger->byHeader[18];
+					zeiger->iHeight = *(long*)&zeiger->byHeader[22];
 					if (lDateilaenge != zeiger->iDateilaenge)
 					{
 						free(zeiger);
