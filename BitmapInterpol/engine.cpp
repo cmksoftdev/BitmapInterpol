@@ -70,8 +70,8 @@ void InterpolationEngine::fillExistingPixels(int multiplicator)
 			iCurrentOutputIndex += iStepX;
 			iCurrentInputIndex += 3;
 		}
-		iCurrentOutputIndex += iStepY;
-		iCurrentInputIndex += bitmapOutput.sFillByteCount;
+		iCurrentOutputIndex += iStepY + bitmapOutput.sFillByteCount;
+		iCurrentInputIndex += bitmapInput.sFillByteCount;
 	}
 }
 
