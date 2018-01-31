@@ -44,10 +44,10 @@ stBitmap* ins_chopbm(char* dat)
 						fclose(datei);
 						return ERROR_DAT;
 					}
-					lDateilaenge = *(long*)&zeiger->byHeader[2];
-					lPixelstart = *(long*)&zeiger->byHeader[10];
-					zeiger->iWidth = *(long*)&zeiger->byHeader[18];
-					zeiger->iHeight = *(long*)&zeiger->byHeader[22];
+					lDateilaenge = *(unsigned int*)&zeiger->byHeader[2];
+					lPixelstart = *(unsigned int*)&zeiger->byHeader[10];
+					zeiger->iWidth = *(unsigned int*)&zeiger->byHeader[18];
+					zeiger->iHeight = *(unsigned int*)&zeiger->byHeader[22];
 					if (lDateilaenge != zeiger->iDateilaenge)
 					{
 						free(zeiger);
