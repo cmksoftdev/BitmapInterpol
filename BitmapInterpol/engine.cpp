@@ -36,6 +36,8 @@ void InterpolationEngine::createEmptyBitmap(int multiplicator)
 	bitmapOutput.iHeight = bitmapInput.iHeight * multiplicator;
 	bitmapOutput.iWidth = bitmapInput.iWidth * multiplicator;
 	bitmapOutput.sFillByteCount = (bitmapOutput.iWidth % 4);
+	if (bitmapOutput.sFillByteCount != 0)
+		bitmapOutput.sFillByteCount = 4 - bitmapOutput.sFillByteCount;
 	bitmapOutput.iDatenlaenge = bitmapInput.iHeight * bitmapInput.iWidth * (pow * 3) + bitmapOutput.sFillByteCount * bitmapInput.iHeight;
 	bitmapOutput.iDateilaenge = 54 + bitmapOutput.iDatenlaenge;
 	bitmapOutput.byData = new BYTE[bitmapOutput.iDatenlaenge];
